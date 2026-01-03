@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TEC | Gadgets & Jewelry Store</title>
+  <!-- Google verification meta tag -->
+  <meta name="google-site-verification" content="F2GOgpgGQw16TZvpHqG-TLzfvXWN31mFteXHVaF7Z3c" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">TEC</div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#gadgets">Gadgets</a>
+    <a href="#jewelry">Jewelry</a>
+    <a href="#cart">Cart (<span id="cart-count">0</span>)</a>
+  </nav>
+</header>
+
+<!-- HOME SECTION -->
+<section id="home" class="hero">
+  <h1>Technology & Elegance. Connected.</h1>
+  <p>Smart gadgets and premium jewelry in one place</p>
+</section>
+
+<!-- ABOUT SECTION -->
+<section id="about" class="section">
+  <h2>About TEC</h2>
+  <p>TEC is your one-stop shop for the latest gadgets and exquisite jewelry. We combine technology with elegance to bring you premium products that fit your lifestyle.</p>
+</section>
+
+<!-- CONTACT SECTION -->
+<section id="contact" class="section">
+  <h2>Contact Us</h2>
+  <p>Email: info@tecstore.com</p>
+  <p>Phone: +2348131355837</p>
+</section>
+
+<!-- GADGETS -->
+<section id="gadgets" class="section products">
+  <h2>Gadgets</h2>
+
+  <div class="product">
+    <img src="images/smartwatch.jpg" alt="Smart Watch">
+    <h3>Smart Watch</h3>
+    <p>₦45,000</p>
+    <div class="quantity-selector">
+      <button onclick="changeQuantity('Smart Watch', -1)">-</button>
+      <span id="qty-Smart Watch">1</span>
+      <button onclick="changeQuantity('Smart Watch', 1)">+</button>
+    </div>
+    <button onclick="addToCartWithQty('Smart Watch', 45000)">Add to Cart</button>
+  </div>
+
+  <div class="product">
+    <img src="images/bluetooth-speaker.jpg" alt="Bluetooth Speaker">
+    <h3>Bluetooth Speaker</h3>
+    <p>₦30,000</p>
+    <div class="quantity-selector">
+      <button onclick="changeQuantity('Bluetooth Speaker', -1)">-</button>
+      <span id="qty-Bluetooth Speaker">1</span>
+      <button onclick="changeQuantity('Bluetooth Speaker', 1)">+</button>
+    </div>
+    <button onclick="addToCartWithQty('Bluetooth Speaker', 30000)">Add to Cart</button>
+  </div>
+
+  <div class="product">
+    <img src="images/wireless-earbuds.jpg" alt="Wireless Earbuds">
+    <h3>Wireless Earbuds</h3>
+    <p>₦25,000</p>
+    <div class="quantity-selector">
+      <button onclick="changeQuantity('Wireless Earbuds', -1)">-</button>
+      <span id="qty-Wireless Earbuds">1</span>
+      <button onclick="changeQuantity('Wireless Earbuds', 1)">+</button>
+    </div>
+    <button onclick="addToCartWithQty('Wireless Earbuds', 25000)">Add to Cart</button>
+  </div>
+</section>
+
+<!-- JEWELRY -->
+<section id="jewelry" class="section products">
+  <h2>Jewelry</h2>
+
+  <div class="product">
+    <img src="images/gold-necklace.jpg" alt="Gold Necklace">
+    <h3>Gold Necklace</h3>
+    <p>₦120,000</p>
+    <div class="quantity-selector">
+      <button onclick="changeQuantity('Gold Necklace', -1)">-</button>
+      <span id="qty-Gold Necklace">1</span>
+      <button onclick="changeQuantity('Gold Necklace', 1)">+</button>
+    </div>
+    <button onclick="addToCartWithQty('Gold Necklace', 120000)">Add to Cart</button>
+  </div>
+
+  <div class="product">
+    <img src="images/diamond-ring.jpg" alt="Diamond Ring">
+    <h3>Diamond Ring</h3>
+    <p>₦250,000</p>
+    <div class="quantity-selector">
+      <button onclick="changeQuantity('Diamond Ring', -1)">-</button>
+      <span id="qty-Diamond Ring">1</span>
+      <button onclick="changeQuantity('Diamond Ring', 1)">+</button>
+    </div>
+    <button onclick="addToCartWithQty('Diamond Ring', 250000)">Add to Cart</button>
+  </div>
+
+  <div class="product">
+    <img src="images/luxury-bracelet.jpg" alt="Luxury Bracelet">
+    <h3>Luxury Bracelet</h3>
+    <p>₦85,000</p>
+    <div class="quantity-selector">
+      <button onclick="changeQuantity('Luxury Bracelet', -1)">-</button>
+      <span id="qty-Luxury Bracelet">1</span>
+      <button onclick="changeQuantity('Luxury Bracelet', 1)">+</button>
+    </div>
+    <button onclick="addToCartWithQty('Luxury Bracelet', 85000)">Add to Cart</button>
+  </div>
+</section>
+
+<!-- CART -->
+<section id="cart" class="section cart">
+  <h2>Your Cart</h2>
+  <ul id="cart-items"></ul>
+  <p>Total: ₦<span id="cart-total">0</span></p>
+  <button id="whatsapp-checkout" onclick="checkoutWhatsApp()">Checkout via WhatsApp</button>
+</section>
+
+<footer>
+  <p>© 2026 TEC. Gadgets & Jewelry Store.</p>
+</footer>
+
+<script>
+// CART
+var cart = {};
+var selectedQuantity = {};
+
+// Load cart from localStorage
+if(localStorage.getItem('tecCart')){
+  cart = JSON.parse(localStorage.getItem('tecCart'));
+  renderCart();
+}
+
+// Initialize quantities
+function initQuantity(product){
+  if(!selectedQuantity[product]) selectedQuantity[product] = 1;
+  var qtyElem = document.getElementById("qty-" + product);
+  if(qtyElem) qtyElem.textContent = selectedQuantity[product];
+}
+
+// Change quantity on product card
+function changeQuantity(product, delta){
+  if(!selectedQuantity[product]) selectedQuantity[product] = 1;
+  selectedQuantity[product] += delta;
+  if(selectedQuantity[product] < 1) selectedQuantity[product] = 1;
+  document.getElementById("qty-" + product).textContent = selectedQuantity[product];
+}
+
+// Add selected quantity to cart
+function addToCartWithQty(product, price){
+  var qty = selectedQuantity[product] || 1;
+  if(cart[product]){
+    cart[product].quantity += qty;
+  } else {
+    cart[product] = {quantity: qty, price: price};
+  }
+  saveCart();
+  renderCart();
+  selectedQuantity[product] = 1; // reset
+  initQuantity(product);
+}
+
+// Cart functions
+function saveCart(){ localStorage.setItem('tecCart', JSON.stringify(cart)); }
+function increase(item){ cart[item].quantity++; saveCart(); renderCart(); }
+function decrease(item){ if(cart[item].quantity>1){cart[item].quantity--;}else{delete cart[item];} saveCart(); renderCart();}
+function removeItem(item){ delete cart[item]; saveCart(); renderCart(); }
+function updateCartCount(){ var count=0; for(var k in cart){count+=cart[k].quantity;} document.getElementById("cart-count").textContent=count; }
+function updateCartTotal(){ var total=0; for(var k in cart){total+=cart[k].quantity*cart[k].price;} document.getElementById("cart-total").textContent=total; }
+
+function renderCart(){
+  var cartItems = document.getElementById("cart-items");
+  cartItems.innerHTML = "";
+  for(var item in cart){
+    var li=document.createElement("li");
+    li.textContent = item + " x " + cart[item].quantity + " ";
+
+    var plusBtn=document.createElement("button"); plusBtn.textContent="+"; plusBtn.onclick=(function(it){return function(){increase(it);}})(item);
+    var minusBtn=document.createElement("button"); minusBtn.textContent="-"; minusBtn.onclick=(function(it){return function(){decrease(it);}})(item);
+    var removeBtn=document.createElement("button"); removeBtn.textContent="Remove"; removeBtn.onclick=(function(it){return function(){removeItem(it);}})(item);
+
+    li.appendChild(plusBtn); li.appendChild(minusBtn); li.appendChild(removeBtn);
+    cartItems.appendChild(li);
+  }
+  updateCartCount(); updateCartTotal();
+}
+
+// WhatsApp checkout
+function checkoutWhatsApp(){
+  if(Object.keys(cart).length===0){alert("Your cart is empty!"); return;}
+  var message="Hi, I want to order:\n";
+  var totalAmount=0;
+  for(var item in cart){
+    message += item + " x" + cart[item].quantity + "\n";
+    totalAmount += cart[item].quantity * cart[item].price;
+  }
+  message += "Total: ₦" + totalAmount;
+  var phoneNumber="2348131355837";
+  var url="https://wa.me/"+phoneNumber+"?text="+encodeURIComponent(message);
+  window.open(url,"_blank");
+}
+
+// Initialize all quantities on load
+window.onload = function(){
+  var products = ["Smart Watch","Bluetooth Speaker","Wireless Earbuds","Gold Necklace","Diamond Ring","Luxury Bracelet"];
+  products.forEach(function(p){ initQuantity(p); });
+};
+</script>
+</body>
+</html>
