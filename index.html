@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEC | Gadgets & Jewelry Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .cart-icon {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section Styling */
+        section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: #667eea;
+        }
+
+        /* About Section */
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .contact-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .contact-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .contact-item strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-item a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Product Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .product-description {
+            color: #666;
+            font-size: 0.95rem;
+            margin: 0.5rem 0 1rem 0;
+            line-height: 1.5;
+        }
+
+        .price {
+            font-size: 1.8rem;
+            color: #667eea;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .quantity-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .quantity {
+            font-size: 1.2rem;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.3s;
+        }
+
+        .add-to-cart:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+        .add-to-cart:active {
+            transform: scale(0.98);
+        }
+
+        /* Cart Section */
+        #cart {
+            background: #f9f9f9;
+        }
+
+        .cart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .cart-empty {
+            text-align: center;
+            color: #999;
+            padding: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-total {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-align: right;
+            margin: 2rem 0;
+            color: #667eea;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background: #1ea952;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 3rem 2rem 1.5rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: #764ba2;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #555;
+            color: #999;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            section h2 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">TEC</a>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#gadgets">Gadgets</a>
+                <a href="#jewelry">Jewelries</a>
+                <a href="#cart" class="cart-icon">Cart (<span id="cart-count">0</span>)</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Technology & Elegance. Connected.</h1>
+        <p>Smart gadgets and premium jewelry in one place</p>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2>About TEC</h2>
+        <div class="about-content">
+            <p>Welcome to TEC, where technology meets elegance. We are your one-stop destination for premium gadgets and exquisite jewelry pieces that complement your modern lifestyle.</p>
+            
+            <p>Our carefully curated collection features the latest smart devices and timeless jewelry pieces, ensuring you stay connected and stylish. We pride ourselves on quality products, competitive prices, and exceptional customer service.</p>
+
+            <div class="contact-info">
+                <h3>Get In Touch</h3>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <strong>📱 WhatsApp</strong>
+                        <a href="https://wa.me/2348131355837" target="_blank">+234 813 135 5837</a>
+                    </div>
+                    <div class="contact-item">
+                        <strong>📧 Email</strong>
+                        <a href="mailto:chikamsoronaldo58@gmail.com">chikamsoronaldo58@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <strong>📍 Location</strong>
+                        Lagos, Nigeria
+                    </div>
+                    <div class="contact-item">
+                        <strong>🕐 Hours</strong>
+                        Mon-Sat: 9AM - 7PM
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gadgets Section -->
+    <section id="gadgets">
+        <h2>Gadgets</h2>
+        <div class="products-grid">
+            <div class="product-card" data-product="Smartwatches" data-price="20000">
+                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=500&fit=crop" alt="Smartwatches" class="product-image">
+                <div class="product-info">
+                    <h3>Smartwatches</h3>
+                    <p class="product-description">Track your fitness, monitor your health, and stay connected with this feature-packed smartwatch. Water-resistant with 7-day battery life.</p>
+                    <div class="price">₦20,000</div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn minus">-</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn plus">+</button>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-product="Bluetooth Speakers" data-price="15000">
+                <img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&h=500&fit=crop" alt="Bluetooth Speakers" class="product-image">
+                <div class="product-info">
+                    <h3>Bluetooth Speakers</h3>
+                    <p class="product-description">Premium sound quality in a portable design. 360° audio, waterproof, and up to 12 hours of playtime. Perfect for any occasion.</p>
+                    <div class="price">₦15,000</div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn minus">-</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn plus">+</button>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-product="Wireless Earbuds" data-price="10000">
+                <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500&h=500&fit=crop" alt="Wireless Earbuds" class="product-image">
+                <div class="product-info">
+                    <h3>Wireless Earbuds</h3>
+                    <p class="product-description">Crystal-clear audio with active noise cancellation. Ergonomic fit, touch controls, and wireless charging case included.</p>
+                    <div class="price">₦10,000</div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn minus">-</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn plus">+</button>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jewelry Section -->
+    <section id="jewelry">
+        <h2>Jewelries</h2>
+        <div class="products-grid">
+            <div class="product-card" data-product="Gold Necklaces" data-price="25000">
+                <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=500&fit=crop" alt="Gold Necklaces" class="product-image">
+                <div class="product-info">
+                    <h3>Gold Necklaces</h3>
+                    <p class="product-description">Elegant 18k gold-plated necklace with a timeless design. Perfect for both casual and formal occasions. Hypoallergenic and tarnish-resistant.</p>
+                    <div class="price">₦25,000</div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn minus">-</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn plus">+</button>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-product="Diamond Rings" data-price="35000">
+                <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&h=500&fit=crop" alt="Diamond Rings" class="product-image">
+                <div class="product-info">
+                    <h3>Diamond Rings</h3>
+                    <p class="product-description">Stunning cubic zirconia ring with brilliant cut stones. Sterling silver band with rhodium plating for lasting shine and durability.</p>
+                    <div class="price">₦35,000</div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn minus">-</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn plus">+</button>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-product="Luxury Bracelets" data-price="15000">
+                <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&h=500&fit=crop" alt="Luxury Bracelets" class="product-image">
+                <div class="product-info">
+                    <h3>Luxury Bracelets</h3>
+                    <p class="product-description">Sophisticated chain bracelet with adjustable clasp. Premium metal alloy with elegant finish. Complements any wrist size.</p>
+                    <div class="price">₦15,000</div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn minus">-</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn plus">+</button>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Section -->
+    <section id="cart">
+        <h2>Your Cart</h2>
+        <div class="cart-container">
+            <div id="cart-items">
+                <div class="cart-empty">Your cart is empty</div>
+            </div>
+            <div class="cart-total">Total: ₦<span id="total-amount">0</span></div>
+            <button class="checkout-btn" onclick="checkout()">Checkout via WhatsApp</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>TEC Store</h3>
+                <p>Your trusted destination for premium gadgets and elegant jewelries.</p>
+                <div class="social-links">
+                    <a href="#" title="Facebook">f</a>
+                    <a href="#" title="Instagram">📷</a>
+                    <a href="https://wa.me/2348131355837" target="_blank" title="WhatsApp">💬</a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#gadgets">Gadgets</a></li>
+                    <li><a href="#jewelry">Jewelries</a></li>
+                    <li><a href="#cart">Shopping Cart</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#">Shipping Information</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li>📱 +234 813 135 5837</li>
+                    <li>📧 chikamso
