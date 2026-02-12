@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEC | Premium Gadgets & Jewelry - Lagos</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #333; background: #f5f5f5; }
+        nav { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1rem 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .nav-container { max-width: 1400px; margin: 0 auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+        .brand { color: white; font-size: 1.8rem; font-weight: bold; text-decoration: none; letter-spacing: 2px; }
+        .search-container { flex: 1; max-width: 600px; min-width: 250px; position: relative; }
+        .search-input { width: 100%; padding: 0.75rem 3rem 0.75rem 1rem; border: none; border-radius: 25px; outline: none; background: white; }
+        .search-btn { position: absolute; right: 5px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 0.6rem 1.2rem; border-radius: 20px; color: white; cursor: pointer; }
+        .search-results { position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 12px; margin-top: 0.5rem; max-height: 400px; overflow-y: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.15); display: none; z-index: 1001; }
+        .search-results.active { display: block; }
+        .search-result-item { padding: 1rem; border-bottom: 1px solid #f0f0f0; cursor: pointer; display: flex; align-items: center; gap: 1rem; }
+        .search-result-item:hover { background: #f8f9fa; }
+        .search-result-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .nav-links a { color: white; text-decoration: none; font-weight: 500; padding: 0.5rem 1rem; border-radius: 20px; }
+        .nav-links a:hover { background: rgba(255,255,255,0.2); }
+        .cart-link { background: rgba(255,255,255,0.2); }
+        .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center; padding: 3rem 1rem; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .main-container { max-width: 1400px; margin: 0 auto; padding: 1rem; }
+        .section-header { background: white; padding: 1.5rem; margin: 2rem 0 1rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .section-header h2 { font-size: 1.8rem; color: #333; }
+        .product-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); cursor: pointer; transition: all 0.3s ease; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+        .product-image { width: 100%; height: 280px; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
+        .product-image img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.3s ease; }
+        .product-card:hover .product-image img { transform: scale(1.05); }
+        .badge { position: absolute; top: 10px; left: 10px; background: #ff4757; color: white; padding: 0.3rem 0.6rem; border-radius: 5px; font-size: 0.75rem; font-weight: bold; z-index: 1; }
+        .badge.new { background: #10b981; }
+        .badge.hot { background: #ff4757; }
+        .badge.sale { background: #f59e0b; }
+        .product-info { padding: 1rem; }
+        .product-info h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .product-info p { color: #666; font-size: 0.9rem; margin-bottom: 1rem; }
+        .price { font-size: 1.4rem; font-weight: bold; color: #667eea; margin-bottom: 1rem; }
+        .old-price { text-decoration: line-through; color: #999; font-size: 1rem; margin-left: 0.5rem; }
+        .quantity-controls { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .quantity-btn { background: #f0f0f0; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; }
+        .quantity-btn:hover { background: #667eea; color: white; }
+        .quantity { font-weight: 600; min-width: 30px; text-align: center; }
+        .add-to-cart-btn { width: 100%; padding: 0.75rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        .modal-content { background: white; border-radius: 20px; max-width: 900px; width: 90%; max-height: 90vh; overflow-y: auto; }
+        .modal-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 20px 20px 0 0; position: relative; }
+        .close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 2rem; color: white; cursor: pointer; background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; }
+        .modal-body { padding: 2rem; }
+        .modal-product-image { width: 100%; height: 400px; border-radius: 12px; margin-bottom: 2rem; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .modal-product-image img { width: 100%; height: 100%; object-fit: contain; }
+        .modal-details h2 { font-size: 2rem; margin-bottom: 1rem; }
+        .modal-details .price { font-size: 2rem; }
+        .modal-details p { font-size: 1.1rem; line-height: 1.8; color: #666; margin-bottom: 1rem; }
+        .features-list { list-style: none; margin: 2rem 0; }
+        .features-list li { padding: 0.5rem 0; padding-left: 2rem; position: relative; }
+        .features-list li:before { content: "✓"; position: absolute; left: 0; color: #10b981; font-weight: bold; font-size: 1.2rem; }
+        .modal-actions { display: flex; gap: 1rem; margin-top: 2rem; }
+        .modal-actions button { flex: 1; padding: 1rem; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; }
+        .btn-add-cart { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-whatsapp { background: #25D366; color: white; }
+        #about, #cart { background: white; padding: 2rem; border-radius: 12px; margin: 2rem 0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
+        .contact-item { background: #f8f9fa; padding: 1.5rem; border-radius: 8px; text-align: center; }
+        .contact-item a { color: #667eea; text-decoration: none; }
+        .cart-item { display: flex; justify-content: space-between; padding: 1rem; background: #f8f9fa; margin-bottom: 0.5rem; border-radius: 8px; }
+        .cart-total { font-size: 1.5rem; font-weight: bold; margin: 1rem 0; text-align: right; }
+        .checkout-btn { width: 100%; padding: 1rem; background: #25D366; color: white; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; }
+        footer { background: #2c3e50; color: white; padding: 3rem 1rem 1rem; margin-top: 4rem; }
+        .footer-content { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        .footer-section ul { list-style: none; }
+        .footer-section a { color: #bbb; text-decoration: none; }
+        .copyright { text-align: center; padding-top: 2rem; border-top: 1px solid #444; color: #bbb; }
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; }
+            .search-container { width: 100%; }
+            .hero h1 { font-size: 1.8rem; }
+            .product-row { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+            .modal-content { width: 95%; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="brand">TEC</a>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search gadgets, jewelry..." id="searchInput">
+                <button class="search-btn">🔍</button>
+                <div class="search-results" id="searchResults"></div>
+            </div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#gadgets">Gadgets</a>
+                <a href="#jewelry">Jewelry</a>
+                <a href="#cart" class="cart-link">🛒 Cart (<span id="cartCount">0</span>)</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-modal" onclick="closeModal()">×</button>
+                <h1 id="modalTitle">Product</h1>
+            </div>
+            <div class="modal-body">
+                <div class="modal-product-image"><img id="modalImage" src="" alt=""></div>
+                <div class="modal-details">
+                    <div class="price" id="modalPrice">₦0</div>
+                    <p id="modalDescription"></p>
+                    <h3>Features:</h3>
+                    <ul class="features-list" id="modalFeatures"></ul>
+                </div>
+                <div class="quantity-controls">
+                    <button class="quantity-btn" onclick="updateModalQuantity(-1)">-</button>
+                    <span class="quantity" id="modalQuantity">1</span>
+                    <button class="quantity-btn" onclick="updateModalQuantity(1)">+</button>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-add-cart" onclick="addToCartFromModal()">🛒 Add to Cart</button>
+                    <button class="btn-whatsapp" onclick="orderViaWhatsApp()">💬 Order on WhatsApp</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="hero" id="home">
+        <h1>Technology & Elegance. Connected.</h1>
+        <p>Premium gadgets and jewelry in Lagos, Nigeria</p>
+    </section>
+
+    <div class="main-container">
+        <section id="about">
+            <h2 style="text-align: center; margin-bottom: 1.5rem;">About TEC</h2>
+            <p style="text-align: center; margin-bottom: 1rem; color: #555;">Your one-stop destination for premium gadgets and exquisite jewelry in Lagos. Quality products, competitive prices, exceptional service.</p>
+            <div class="contact-grid">
+                <div class="contact-item"><h4>📱 WhatsApp</h4><a href="https://wa.me/2348131355837">+234 813 135 5837</a></div>
+                <div class="contact-item"><h4>📧 Email</h4><a href="mailto:chikamsoronaldo58@gmail.com">chikamsoronaldo58@gmail.com</a></div>
+                <div class="contact-item"><h4>📍 Location</h4><p>Lagos, Nigeria</p></div>
+                <div class="contact-item"><h4>🕐 Hours</h4><p>Mon-Sat: 9AM - 7PM</p></div>
+            </div>
+        </section>
+
+        <section id="gadgets">
+            <div class="section-header"><h2>🔌 Premium Gadgets</h2></div>
+            <div class="product-row">
+                <div class="product-card" data-name="Fast Charger 65W" data-price="11000" data-image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%23667eea'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E⚡%3C/text%3E%3C/svg%3E" data-description="Super fast 65W GaN charger with universal compatibility. Charges phones, tablets, and laptops with multiple safety protections." data-features="65W fast charging,GaN technology,Universal compatibility,Compact design,Multiple safety protections,Foldable plug" onclick="openProductModal(this)">
+                    <div class="product-image"><span class="badge sale">SALE</span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%23667eea'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E⚡%3C/text%3E%3C/svg%3E" alt="Fast Charger"></div>
+                    <div class="product-info"><h3>Fast Charger 65W</h3><p>Super fast charging, universal compatibility.</p><div class="price">₦11,000 <span class="old-price">₦14,000</span></div><div class="quantity-controls"><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, -1)">-</button><span class="quantity">1</span><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, 1)">+</button></div><button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(this)">Add to Cart</button></div>
+                </div>
+
+                <div class="product-card" data-name="USB-C Cable Set (3-Pack)" data-price="4500" data-image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%2310b981'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E🔌%3C/text%3E%3C/svg%3E" data-description="Premium braided USB-C cables in 3 lengths (1m, 2m, 3m). Fast charging and data transfer support with tangle-free design." data-features="3-pack cables (1m/2m/3m),Braided nylon design,Fast charging & data transfer,Tangle-free,Reinforced connectors,Universal USB-C compatibility" onclick="openProductModal(this)">
+                    <div class="product-image"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%2310b981'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E🔌%3C/text%3E%3C/svg%3E" alt="USB-C Cables"></div>
+                    <div class="product-info"><h3>USB-C Cable Set (3-Pack)</h3><p>Durable braided cables, 1m/2m/3m lengths.</p><div class="price">₦4,500</div><div class="quantity-controls"><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, -1)">-</button><span class="quantity">1</span><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, 1)">+</button></div><button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(this)">Add to Cart</button></div>
+                </div>
+
+                <div class="product-card" data-name="Smartwatch Pro" data-price="28000" data-image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%23764ba2'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E⌚%3C/text%3E%3C/svg%3E" data-description="Advanced fitness and health tracking smartwatch with 7-day battery life, waterproof design, and GPS navigation." data-features="Heart rate monitoring,Sleep tracking,GPS navigation,Waterproof IP68,7-day battery life,Multiple sport modes" onclick="openProductModal(this)">
+                    <div class="product-image"><span class="badge new">NEW</span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%23764ba2'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E⌚%3C/text%3E%3C/svg%3E" alt="Smartwatch"></div>
+                    <div class="product-info"><h3>Smartwatch Pro</h3><p>Health tracking, 7-day battery, waterproof.</p><div class="price">₦28,000</div><div class="quantity-controls"><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, -1)">-</button><span class="quantity">1</span><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, 1)">+</button></div><button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(this)">Add to Cart</button></div>
+                </div>
+
+                <div class="product-card" data-name="Bluetooth Speaker Pro" data-price="22000" data-image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%23f59e0b'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E🔊%3C/text%3E%3C/svg%3E" data-description="Premium portable speaker with 360° surround sound and waterproof design. 12 hours playtime, perfect for outdoor activities." data-features="360° surround sound,12 hours playtime,Waterproof IPX7,Bluetooth 5.0,Built-in microphone,USB-C charging" onclick="openProductModal(this)">
+                    <div class="product-image"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%23f59e0b'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E🔊%3C/text%3E%3C/svg%3E" alt="Bluetooth Speaker"></div>
+                    <div class="product-info"><h3>Bluetooth Speaker Pro</h3><p>360° sound, waterproof, 12hr playtime.</p><div class="price">₦22,000</div><div class="quantity-controls"><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, -1)">-</button><span class="quantity">1</span><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, 1)">+</button></div><button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(this)">Add to Cart</button></div>
+                </div>
+            </div>
+
+            <div class="product-row">
+                <div class="product-card" data-name="Wireless Earbuds Pro" data-price="12000" data-image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%23ef4444'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E🎧%3C/text%3E%3C/svg%3E" data-description="Crystal-clear audio with active noise cancellation. Touch controls and wireless charging case included for ultimate convenience." data-features="Active noise cancellation,Touch controls,Wireless charging case,6hrs battery + 24hrs with case,IPX4 water resistant,Premium sound quality" onclick="openProductModal(this)">
+                    <div class="product-image"><span class="badge hot">HOT</span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%23ef4444'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E🎧%3C/text%3E%3C/svg%3E" alt="Wireless Earbuds"></div>
+                    <div class="product-info"><h3>Wireless Earbuds Pro</h3><p>Noise cancellation, wireless charging.</p><div class="price">₦12,000</div><div class="quantity-controls"><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, -1)">-</button><span class="quantity">1</span><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, 1)">+</button></div><button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(this)">Add to Cart</button></div>
+                </div>
+
+                <div class="product-card" data-name="Bluetooth Headset Pro" data-price="15000" data-image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%233b82f6'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E🎧%3C/text%3E%3C/svg%3E" data-description="Premium over-ear headphones with deep bass and crystal-clear sound. Foldable design with 30-hour battery life." data-features="Premium sound quality,30-hour battery life,Foldable design,Built-in microphone,Comfortable ear cushions,Bluetooth 5.0" onclick="openProductModal(this)">
+                    <div class="product-image"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%233b82f6'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E🎧%3C/text%3E%3C/svg%3E" alt="Bluetooth Headset"></div>
+                    <div class="product-info"><h3>Bluetooth Headset Pro</h3><p>Premium sound, 30-hour battery, foldable.</p><div class="price">₦15,000</div><div class="quantity-controls"><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, -1)">-</button><span class="quantity">1</span><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, 1)">+</button></div><button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(this)">Add to Cart</button></div>
+                </div>
+
+                <div class="product-card" data-name="Tempered Glass Screen Protector" data-price="2500" data-image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%2306b6d4'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E📱%3C/text%3E%3C/svg%3E" data-description="Premium 9H hardness tempered glass screen protector. Crystal clear with scratch-resistant coating and easy bubble-free installation." data-features="9H hardness,99% transparency,Scratch resistant,Easy bubble-free installation,Oleophobic coating,Case friendly design" onclick="openProductModal(this)">
+                    <div class="product-image"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%2306b6d4'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E📱%3C/text%3E%3C/svg%3E" alt="Screen Protector"></div>
+                    <div class="product-info"><h3>Tempered Glass Screen Protector</h3><p>9H hardness, crystal clear, easy install.</p><div class="price">₦2,500</div><div class="quantity-controls"><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, -1)">-</button><span class="quantity">1</span><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, 1)">+</button></div><button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(this)">Add to Cart</button></div>
+                </div>
+
+                <div class="product-card" data-name="Adjustable Phone Stand" data-price="3500" data-image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%238b5cf6'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E📲%3C/text%3E%3C/svg%3E" data-description="Premium aluminum phone stand with 360° rotation. Adjustable height and angle, fits all phone sizes with non-slip base." data-features="Aluminum construction,360° rotation,Adjustable height & angle,Non-slip base,Universal compatibility,Portable & foldable" onclick="openProductModal(this)">
+                    <div class="product-image"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%238b5cf6'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E📲%3C/text%3E%3C/svg%3E" alt="Phone Stand"></div>
+                    <div class="product-info"><h3>Adjustable Phone Stand</h3><p>Aluminum, 360° rotation, adjustable.</p><div class="price">₦3,500</div><div class="quantity-controls"><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, -1)">-</button><span class="quantity">1</span><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, 1)">+</button></div><button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(this)">Add to Cart</button></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="jewelry">
+            <div class="section-header"><h2>💎 Premium Jewelry</h2></div>
+            <div class="product-row">
+                <div class="product-card" data-name="18K Gold-Plated Necklace" data-price="32000" data-image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%23f59e0b'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E📿%3C/text%3E%3C/svg%3E" data-description="Elegant 18k gold-plated necklace with timeless design. Hypoallergenic and tarnish-resistant, perfect for any occasion." data-features="18K gold plating,Hypoallergenic,Tarnish-resistant,Adjustable length,Luxury gift box included,30-day warranty" onclick="openProductModal(this)">
+                    <div class="product-image"><span class="badge">LUXURY</span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%23f59e0b'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E📿%3C/text%3E%3C/svg%3E" alt="Gold Necklace"></div>
+                    <div class="product-info"><h3>18K Gold-Plated Necklace</h3><p>Elegant, hypoallergenic, tarnish-resistant.</p><div class="price">₦32,000</div><div class="quantity-controls"><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, -1)">-</button><span class="quantity">1</span><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, 1)">+</button></div><button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(this)">Add to Cart</button></div>
+                </div>
+
+                <div class="product-card" data-name="Cubic Zirconia Ring" data-price="45000" data-image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%23ec4899'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E💍%3C/text%3E%3C/svg%3E" data-description="Stunning cubic zirconia ring with brilliant cut stones. Sterling silver band with rhodium plating for lasting shine and durability." data-features="Cubic zirconia stones,Sterling silver band,Rhodium plating,Brilliant cut design,Luxury gift box included,Lifetime warranty" onclick="openProductModal(this)">
+                    <div class="product-image"><span class="badge">PREMIUM</span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%23ec4899'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E💍%3C/text%3E%3C/svg%3E" alt="Diamond Ring"></div>
+                    <div class="product-info"><h3>Cubic Zirconia Ring</h3><p>Brilliant cut stones, sterling silver.</p><div class="price">₦45,000</div><div class="quantity-controls"><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, -1)">-</button><span class="quantity">1</span><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, 1)">+</button></div><button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(this)">Add to Cart</button></div>
+                </div>
+
+                <div class="product-card" data-name="Luxury Chain Bracelet" data-price="20000" data-image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%2314b8a6'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E⛓️%3C/text%3E%3C/svg%3E" data-description="Sophisticated chain bracelet with adjustable clasp. Premium metal alloy with elegant finish complements any wrist size." data-features="Premium metal alloy,Adjustable clasp,Elegant finish,Scratch-resistant coating,Universal fit,Gift packaging included" onclick="openProductModal(this)">
+                    <div class="product-image"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%2314b8a6'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E⛓️%3C/text%3E%3C/svg%3E" alt="Bracelet"></div>
+                    <div class="product-info"><h3>Luxury Chain Bracelet</h3><p>Adjustable clasp, premium metal alloy.</p><div class="price">₦20,000</div><div class="quantity-controls"><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, -1)">-</button><span class="quantity">1</span><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, 1)">+</button></div><button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(this)">Add to Cart</button></div>
+                </div>
+
+                <div class="product-card" data-name="Pearl Stud Earrings" data-price="25000" data-image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%23a855f7'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E👂%3C/text%3E%3C/svg%3E" data-description="Classic pearl stud earrings perfect for any occasion. Secure backing ensures comfortable all-day wear with timeless elegance." data-features="Genuine pearl finish,Secure backing,Hypoallergenic posts,Classic design,Luxury box included,Quality guarantee" onclick="openProductModal(this)">
+                    <div class="product-image"><span class="badge">ELEGANT</span><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect width='400' height='400' fill='%23a855f7'/%3E%3Ctext x='50%25' y='50%25' font-size='100' text-anchor='middle' dy='.3em' fill='white'%3E👂%3C/text%3E%3C/svg%3E" alt="Pearl Earrings"></div>
+                    <div class="product-info"><h3>Pearl Stud Earrings</h3><p>Classic pearls, secure backing.</p><div class="price">₦25,000</div><div class="quantity-controls"><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, -1)">-</button><span class="quantity">1</span><button class="quantity-btn" onclick="event.stopPropagation(); updateQuantity(this, 1)">+</button></div><button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(this)">Add to Cart</button></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cart">
+            <h2 style="text-align: center; margin-bottom: 1.5rem;">🛒 Your Shopping Cart</h2>
+            <div id="cartItems"><p style="text-align: center; color: #999;">Your cart is empty</p></div>
+            <div class="cart-total">Total: ₦<span id="cartTotal">0</span></div>
+            <button class="checkout-btn" onclick="checkout()">💬 Checkout via WhatsApp</button>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section"><h3>TEC Store</h3><p>Premium gadgets and elegant jewelry in Lagos, Nigeria.</p></div>
+            <div class="footer-section"><h3>Quick Links</h3><ul><li><a href="#home">Home</a></li><li><a href="#gadgets">Gadgets</a></li><li><a href="#jewelry">Jewelry</a></li><li><a href="#cart">Cart</a></li></ul></div>
+            <div class="footer-section"><h3>Contact</h3><ul><li>📱 +234 813 135 5837</li><li>📧 chikamsoronaldo58@gmail.com</li><li>📍 Lagos, Nigeria</li><li>🕐 Mon-Sat: 9AM - 7PM</li></ul></div>
+        </div>
+        <div class="copyright">© 2026 TEC. All rights reserved. Premium Gadgets & Jewelry Store - Lagos, Nigeria</div>
+    </footer>
+
+    <script>
+        let cart=[];let currentProduct=null;function updateQuantity(b,c){const q=b.parentElement.querySelector('.quantity');let qty=Math.max(1,parseInt(q.textContent)+c);q.textContent=qty}function addToCart(b){const c=b.closest('.product-card');const n=c.dataset.name;const p=parseInt(c.dataset.price);const q=parseInt(c.querySelector('.quantity').textContent);const e=cart.find(i=>i.name===n);if(e){e.quantity+=q}else{cart.push({name:n,price:p,quantity:q})}updateCartDisplay();b.textContent='✓ Added!';b.style.background='#10b981';setTimeout(()=>{b.textContent='Add to Cart';b.style.background=''},1500)}function updateCartDisplay(){const cc=document.getElementById('cartCount');const ci=document.getElementById('cartItems');const ct=document.getElementById('cartTotal');const ti=cart.reduce((s,i)=>s+i.quantity,0);const tp=cart.reduce((s,i)=>s+(i.price*i.quantity),0);cc.textContent=ti;ct.textContent=tp.toLocaleString();if(cart.length===0){ci.innerHTML='<p style="text-align:center;color:#999;">Your cart is empty</p>'}else{ci.innerHTML=cart.map((i,idx)=>`<div class="cart-item"><span><strong>${i.name}</strong> × ${i.quantity}</span><span>₦${(i.price*i.quantity).toLocaleString()} <button onclick="removeFromCart(${idx})" style="background:#ff4757;color:white;border:none;padding:0.3rem 0.6rem;border-radius:5px;margin-left:0.5rem;cursor:pointer;">Remove</button></span></div>`).join('')}}function removeFromCart(idx){cart.splice(idx,1);updateCartDisplay()}function checkout(){if(cart.length===0){alert('Your cart is empty!');return}const msg=cart.map(i=>`${i.name} × ${i.quantity} - ₦${(i.price*i.quantity).toLocaleString()}`).join('%0A');const tot=cart.reduce((s,i)=>s+(i.price*i.quantity),0);const wm=`Hello! I'd like to order:%0A%0A${msg}%0A%0ATotal: ₦${tot.toLocaleString()}`;window.open(`https://wa.me/2348131355837?text=${wm}`,'_blank')}function openProductModal(c){currentProduct={name:c.dataset.name,price:parseInt(c.dataset.price),image:c.dataset.image,description:c.dataset.description,features:c.dataset.features.split(',')};document.getElementById('modalTitle').textContent=currentProduct.name;document.getElementById('modalPrice').textContent='₦'+currentProduct.price.toLocaleString();document.getElementById('modalImage').src=currentProduct.image;document.getElementById('modalDescription').textContent=currentProduct.description;document.getElementById('modalQuantity').textContent='1';const fl=document.getElementById('modalFeatures');fl.innerHTML=currentProduct.features.map(f=>`<li>${f.trim()}</li>`).join('');document.getElementById('productModal').classList.add('active');document.body.style.overflow='hidden'}function closeModal(){document.getElementById('productModal').classList.remove('active');document.body.style.overflow='auto';currentProduct=null}function updateModalQuantity(c){const q=document.getElementById('modalQuantity');let qty=Math.max(1,parseInt(q.textContent)+c);q.textContent=qty}function addToCartFromModal(){if(!currentProduct)return;const qty=parseInt(document.getElementById('modalQuantity').textContent);const e=cart.find(i=>i.name===currentProduct.name);if(e){e.quantity+=qty}else{cart.push({name:currentProduct.name,price:currentProduct.price,quantity:qty})}updateCartDisplay();closeModal();alert(`${currentProduct.name} added to cart!`)}function orderViaWhatsApp(){if(!currentProduct)return;const qty=parseInt(document.getElementById('modalQuantity').textContent);const tot=currentProduct.price*qty;const msg=`Hello! I'd like to order:%0A%0A${currentProduct.name} × ${qty} - ₦${tot.toLocaleString()}%0A%0ATotal: ₦${tot.toLocaleString()}`;window.open(`https://wa.me/2348131355837?text=${msg}`,'_blank')}document.getElementById('productModal').addEventListener('click',function(e){if(e.target===this){closeModal()}});const si=document.getElementById('searchInput');const sr=document.getElementById('searchResults');function getAllProducts(){const p=[];document.querySelectorAll('.product-card').forEach(c=>{p.push({image:c.dataset.image,name:c.dataset.name,price:c.dataset.price,description:c.dataset.description,element:c})});return p}function performSearch(q){const p=getAllProducts();if(!q.trim()){sr.classList.remove('active');return}const f=p.filter(pr=>pr.name.toLowerCase().includes(q.toLowerCase())||pr.description.toLowerCase().includes(q.toLowerCase()));if(f.length===0){sr.innerHTML='<div style="padding:2rem;text-align:center;color:#999;">No products found</div>'}else{sr.innerHTML=f.map(pr=>`<div class="search-result-item" onclick="scrollToProduct('${pr.name}')"><img src="${pr.image}" alt="${pr.name}"><div><h4>${pr.name}</h4><p style="color:#667eea;font-weight:bold;">₦${parseInt(pr.price).toLocaleString()}</p></div></div>`).join('')}sr.classList.add('active')}function scrollToProduct(n){const p=getAllProducts();const pr=p.find(p=>p.name===n);if(pr){pr.element.scrollIntoView({behavior:'smooth',block:'center'});pr.element.click()}sr.classList.remove('active');si.value=''}si.addEventListener('input',e=>performSearch(e.target.value));document.addEventListener('click',e=>{if(!e.target.closest('.search-container')){sr.classList.remove('active')}});document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',function(e){e.preventDefault();const t=document.querySelector(this.getAttribute('href'));if(t){t.scrollIntoView({behavior:'smooth'})}})});
+    </script>
+</body>
+</html>
